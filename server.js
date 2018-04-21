@@ -56,7 +56,7 @@ app.get("/", function(req, res) {
     var hbsObject = {
       article: data
     };
-    console.log(hbsObject);
+    ////console.log(hbsObject);
     res.render("home", hbsObject);
   });
 });
@@ -73,7 +73,10 @@ app.get("/saved", function(req, res) {
 // A GET request to scrape the echojs website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
+  console.log("site");
   request("http://www.miamitimesonline.com/", function(error, response, html) {
+    console.log("complete");
+
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(html);
     // Now, we grab every h2 within an article tag, and do the following:
@@ -87,6 +90,8 @@ app.get("/scrape", function(req, res) {
       result.summary = $(this).children(".summary").text();
       result.link = $(this).children("h2").children("a").attr("href");
 
+      console.log('my result: ', result);
+
       // Using our Article model, create a new entry
       // This effectively passes the result object to the entry (and the title and link)
       var entry = new Article(result);
@@ -95,11 +100,11 @@ app.get("/scrape", function(req, res) {
       entry.save(function(err, doc) {
         // Log any errors
         if (err) {
-          console.log(err);
+          console.log('error test: ' , err);
         }
         // Or log the doc
         else {
-          console.log(doc);
+          //console.log('my doc: ', doc);
         }
       });
 
@@ -116,7 +121,7 @@ app.get("/articles", function(req, res) {
   Article.find({}, function(error, doc) {
     // Log any errors
     if (error) {
-      console.log(error);
+      //console.log(error);
     }
     // Or send the doc to the browser as a json object
     else {
@@ -135,7 +140,7 @@ app.get("/articles/:id", function(req, res) {
   .exec(function(error, doc) {
     // Log any errors
     if (error) {
-      console.log(error);
+      //console.log(error);
     }
     // Otherwise, send the doc to the browser as a json object
     else {
@@ -153,7 +158,7 @@ app.post("/articles/save/:id", function(req, res) {
       .exec(function(err, doc) {
         // Log any errors
         if (err) {
-          console.log(err);
+          //console.log(err);
         }
         else {
           // Or send the document to the browser
@@ -170,7 +175,7 @@ app.post("/articles/delete/:id", function(req, res) {
       .exec(function(err, doc) {
         // Log any errors
         if (err) {
-          console.log(err);
+          //console.log(err);
         }
         else {
           // Or send the document to the browser
@@ -187,12 +192,12 @@ app.post("/notes/save/:id", function(req, res) {
     body: req.body.text,
     article: req.params.id
   });
-  console.log(req.body)
+  //console.log(req.body)
   // And save the new note the db
   newNote.save(function(error, note) {
     // Log any errors
     if (error) {
-      console.log(error);
+      //console.log(error);
     }
     // Otherwise
     else {
@@ -202,7 +207,7 @@ app.post("/notes/save/:id", function(req, res) {
       .exec(function(err) {
         // Log any errors
         if (err) {
-          console.log(err);
+          //console.log(err);
           res.send(err);
         }
         else {
@@ -220,7 +225,7 @@ app.delete("/notes/delete/:note_id/:article_id", function(req, res) {
   Note.findOneAndRemove({ "_id": req.params.note_id }, function(err) {
     // Log any errors
     if (err) {
-      console.log(err);
+      //console.log(err);
       res.send(err);
     }
     else {
@@ -229,7 +234,7 @@ app.delete("/notes/delete/:note_id/:article_id", function(req, res) {
         .exec(function(err) {
           // Log any errors
           if (err) {
-            console.log(err);
+            //console.log(err);
             res.send(err);
           }
           else {
@@ -243,6 +248,6 @@ app.delete("/notes/delete/:note_id/:article_id", function(req, res) {
 
 // Listen on port
 app.listen(port, function() {
-  console.log("Here is where the Magic is happening " + port);
+  //console.log("Here is where the Magic is happening " + port);
 });
 
