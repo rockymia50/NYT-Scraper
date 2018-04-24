@@ -42,7 +42,7 @@ app.set("view engine", "handlebars");
 
 // Database configuration with mongoose
 mongoose.Promise = Promise;
-mongoose.connect("mongodb://localhost/week18Populater", {
+mongoose.connect("mongodb://ds257579.mlab.com:57579/heroku_6x9ft3zj", {
   useMongoClient: true
 });
 
